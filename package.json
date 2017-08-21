@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev:server": "nodemon server.js",
-    "json:server": "json-server --watch data.json"
+    "json:server": "json-server --watch sources.json"
   },
   "author": "Zafuzi",
   "license": "MIT",
