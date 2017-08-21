@@ -9,11 +9,6 @@ const express = require('express'),
 
 app.use('/graphql', expressGraphQL({schema: schema, graphiql: true}))
 
-// var jsonServer = require('json-server') var server = jsonServer.create()
-// server.use(jsonServer.defaults) server.use('/customers',
-// jsonServer.router('customers.json')) server.use('/sources',
-// jsonServer.router('sources.json')) server.listen(3000)
-
 app.listen(4000, () => {
     process.once('SIGUSR2', () => {
         axios
@@ -24,10 +19,25 @@ app.listen(4000, () => {
                     "sources": []
                 }
                 for (let i = 0; i < sources.length; i++) {
-                    console.log("I: " + i)
                     data["sources"].push(sources[i])
+                    axios.post('https://api.graph.cool/simple/v1/cj6lavmtv1sfn01651b4x0f00/source', {
+                        sourceId: source.id,
+                        name: source.name,
+                        url: source.url,
+                        description: source.description,
+                        category: source.category,
+                        language: source.language,
+                        country: source.country
+                    })
                 }
-                fs.writeFile("./sources.json", JSON.stringify(data))
+                // for (let source in sources) {     source = sources[source]     axios
+                // .get('https://newsapi.org/v1/articles?apiKey=ccfdc66609fc4b7b87258020b85d4380
+                // &source=' + source.id)         .then(res => {             let articles =
+                // res.data.articles             axios.post('http://localhost:3000/' +
+                // source.id, {articles: articles})             //client.set("articles:" +
+                // source.id, JSON.stringify(articles))         }) }
+                client.set('sources', JSON.stringify(sources))
+
             })
     })
 

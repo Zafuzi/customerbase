@@ -8,12 +8,8 @@ const {
     } = require('graphql')
 
     const axios = require('axios'),
-        redis = require('redis'),
-        client = redis.createClient()
-
-    client.on("error", function (err) {
-        console.log("Error " + err);
-    });
+        Redis = require('ioredis');
+    redis = new Redis();
 
     // Customer Type
     const CustomerType = new GraphQLObjectType({
@@ -31,6 +27,21 @@ const {
             },
             age: {
                 type: GraphQLInt
+            }
+        })
+    })
+
+    const LogosListType = new GraphQLObjectType({
+        name: 'LogosList',
+        fields: () => ({
+            small: {
+                type: GraphQLString
+            },
+            medium: {
+                type: GraphQLString
+            },
+            large: {
+                type: GraphQLString
             }
         })
     })
@@ -60,7 +71,7 @@ const {
                 type: GraphQLString
             },
             urlsToLogos: {
-                type: GraphQLString
+                type: LogosListType
             },
             sortsByAvailables: {
                 type: GraphQLString
@@ -138,14 +149,18 @@ const {
             },
             sources: {
                 type: new GraphQLList(SourceType),
-                resolve: async(parentValue, args) => {
-                    return axios
-                        .get('http://localhost:3000/sources/')
-                        .then(res => res.data)
+                resolve(parentValue, args) {
+                    let sources = []
+                    redis
+                        .get('sources')
+                        .then(res => {
+                            return res
+                        })
+                    return sources.then(res => res)
                 }
             },
             article: {
-                type: ArticleListType,
+                type: ArticleType,
                 args: {
                     id: {
                         type: GraphQLString
@@ -153,8 +168,11 @@ const {
                 },
                 resolve(parentValue, args) {
                     return axios
-                        .get('https://newsapi.org/v1/articles?apiKey=ccfdc66609fc4b7b87258020b85d4380&source=' + args.id)
-                        .then(res => res.data)
+                        .get('http://127.0.0.1:6379/articles/' + args.id)
+                        .then(res => {
+                            console.log(res.data)
+                            return res.data
+                        })
                 }
             }
         }

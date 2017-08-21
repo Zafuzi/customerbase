@@ -1,28 +1,3 @@
 {
-  "customers": [
-    {
-      "id": "1",
-      "name": "John Doe",
-      "email": "jdoe@gmail.com",
-      "age": 35
-    },
-    {
-      "id": "2",
-      "name": "Steve Smith",
-      "email": "smith@gmail.com",
-      "age": 25
-    },
-    {
-      "id": "3",
-      "name": "Sara Williams",
-      "email": "sara@gmail.com",
-      "age": 32
-    },
-    {
-      "name": "Joe Bomb",
-      "email": "joBomb@gmail.com",
-      "age": 24,
-      "id": "H1mkZpP_-"
-    }
-  ]
+  "articles": []
 }
